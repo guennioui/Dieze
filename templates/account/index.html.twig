@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block content %}
+    <h1>Mon compte</h1>
+    Bienvenue {{ app.user.nom }}
+    <hr>
+    - Modifier mon mot de passe 
+    - Ajouter mes adresses 
+    - Mes commnades
+{% endblock %}
