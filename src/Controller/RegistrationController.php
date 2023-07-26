@@ -14,32 +14,23 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class RegistrationController extends AbstractController
 {
 
-    private $entityManager;
-    private $passwordHasher;
-
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
-    {
-        $this->entityManager = $entityManager;
-        $this->passwordHasher = $passwordHasher;
-    }
-
     /**
      * @Route("/registration", name="registration")
      */
-    public function index(Request $request): Response
+    public function index(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationType::class, $user);
+        $User = new User();
+        $form = $this->createForm(RegistrationType::class, $User);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
-            //dd($password);
-            $user->setPassword($password);
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $User = $form->getData();
+            $hashedPassword = $hasher->hashPassword($User, $User->getPassword());
+            $User->setPassword($hashedPassword);
+            $manager->persist($User);
+            $manager->flush();
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/index.html.twig', [

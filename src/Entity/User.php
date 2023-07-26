@@ -5,13 +5,14 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -85,9 +86,11 @@ class User implements UserInterface
         $this->commandes = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->status = 'active';
-        $this->roles[] = 'ROLE_USER';
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -114,7 +117,7 @@ class User implements UserInterface
     public function getUsername()
     {
         // Retourner l'identifiant de l'utilisateur (par exemple, l'adresse email ou le nom d'utilisateur)
-        return null;
+        return $this->email;
     }
 
     public function eraseCredentials()
@@ -137,7 +140,10 @@ class User implements UserInterface
 
         return $this;
     }
-
+    public function __toString(): string
+    {
+        return $this->email;
+    }
     public function getPrenom(): ?string
     {
         return $this->prenom;
@@ -186,6 +192,9 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
