@@ -76,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roles = [];
 
+
     /**
      * @see UserInterface
      */

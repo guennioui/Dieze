@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.libelle }} - Slowly Riders {% endblock %}
+
+{% block content %}
+        <h1>{{ product.libelle }}</h1>
+ <div class="row">
+    <div class="col-md-4">        
+        <img src="/uploads/{{ product.photo }}" alt="{{ product.libelle }}" class="img-fluid"/>
+    </div>
+    <div class="col-md-6">
+         <h3>{{product.libelle}}</h3>
+             <P> {{ product.description }}</P>
+             <p class="product-page-price">{{ (product.prix /100)| number_format(2) }} MAD</p><hr>
+             <p>{{product.description}}</p>
+             {# <a href="{{ path('add_to_cart',{'id':product.id}) }}" class="btn btn-primary">Ajouter au panier</a> #}
+    </div>                    
+</div>
+
+{% endblock %}
