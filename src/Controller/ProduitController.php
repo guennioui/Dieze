@@ -35,7 +35,8 @@ class ProduitController extends AbstractController
         } else {
             $products = $this->manager->getRepository(Produit::class)->findAll();
         }
-        $products = $this->manager->getRepository(Produit::class)->findAll();
+        
+        //$products = $this->manager->getRepository(Produit::class)->findAll();
         return $this->render('produit/index.html.twig', [
             'products' => $products,
             'form' => $form->createView()

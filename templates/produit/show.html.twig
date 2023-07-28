@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.libelle }} - Slowly Riders {% endblock %}
+{% block title %}{{ product.libelle }} -  {% endblock %}
 
 {% block content %}
         <h1>{{ product.libelle }}</h1>
@@ -13,7 +13,7 @@
              <P> {{ product.description }}</P>
              <p class="product-page-price">{{ (product.prix /100)| number_format(2) }} MAD</p><hr>
              <p>{{product.description}}</p>
-             {# <a href="{{ path('add_to_cart',{'id':product.id}) }}" class="btn btn-primary">Ajouter au panier</a> #}
+             <a href="{{ path('add_to_cart',{ 'id':product.id }) }}" class="btn btn-primary">Ajouter au panier</a>
     </div>                    
 </div>
 
