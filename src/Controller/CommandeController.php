@@ -14,7 +14,12 @@ class CommandeController extends AbstractController
      */
     public function index(): Response
     {
-        $form = $this->createForm(CommandeType::class);
+        if(!$this->getUser()->getAdresses()->getValues()){
+            return $this->redirectToRoute('adresse_add ');
+        }
+        $form = $this->createForm(CommandeType::class, null, [
+            'user'=>$this->getUser()
+        ]);
         return $this->render('commande/index.html.twig', [
             'form' => $form->createView()
         ]);
