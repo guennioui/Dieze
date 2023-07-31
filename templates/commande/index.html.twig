@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Valider ma commande{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+    <h3>Je passe ma commande</h3>
+    <p>Chosissez vos préférences avant de passer votre commande sur notre site</p>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <b>- Chosir mon adresse de livraison</b><br>
+            <b>- Choisir mon transporteur</b>            
+        </div>    
+        <div class="col-md-6">
+            <b>- Recaputilatif de ma commande</b><br>
+            <b>- Payer</b>
+        </div>        
+    </div>    
+{% endblock %}

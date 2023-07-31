@@ -49,6 +49,11 @@ class Commande
      */
     private $reglements;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Transporteur::class, inversedBy="commandes")
+     */
+    private $transporteur;
+
     public function __construct()
     {
         $this->ligneCommandes = new ArrayCollection();
@@ -164,6 +169,18 @@ class Commande
                 $reglement->setCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTransporteur(): ?Transporteur
+    {
+        return $this->transporteur;
+    }
+
+    public function setTransporteur(?Transporteur $transporteur): self
+    {
+        $this->transporteur = $transporteur;
 
         return $this;
     }
