@@ -37,12 +37,6 @@ class RegistrationType extends AbstractType
                     'placeholder' => 'email@email.com'
                 ]
             ])
-            ->add('adresse', TextType::class, [
-                'label' => ' adresse : ',
-                'attr' => [
-                    'placeholder' => 'entrer votre adresse'
-                ]
-            ])
             ->add('telephone', NumberType::class, [
                 'label' => 'votre N° Tel : ',
                 'attr' => [
