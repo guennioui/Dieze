@@ -27,11 +27,6 @@ class Commande
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $adresseLivraison;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $status;
 
     /**
@@ -77,18 +72,6 @@ class Commande
         return $this;
     }
 
-    public function getAdresseLivraison(): ?string
-    {
-        return $this->adresseLivraison;
-    }
-
-    public function setAdresseLivraison(string $adresseLivraison): self
-    {
-        $this->adresseLivraison = $adresseLivraison;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -106,6 +89,14 @@ class Commande
         return $this->user;
     }
 
+    public function getTotal()
+    {
+        $total = null;
+        foreach ($this->getLigneCommandes()->getValues() as $product) {
+            $total += ($product->getMontant() * $product->getQuantity());
+        }
+        return $total;
+    }
     public function setUser(?User $user): self
     {
         $this->user = $user;

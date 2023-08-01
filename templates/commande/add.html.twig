@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block title %}Paiement de ma commande | {{ parent() }}
+{% endblock %}
+
+{% block content %}
+	<h2>Mon récapitulatif</h2>
+	<p>Vérifier vos informations avant de payer votre commande</p>
+	<hr>
+
+	<div class="row">
+		<div class="col-md-6">
+
+			<strong>Mon adresse de livraison</strong>
+			<br>
+			<div class="form-check mt-4">
+				{{delivery_address|raw}}
+			</div>
+			<hr>
+			<strong>Mon transporteur</strong>
+			<br>
+			<div class="form-check">
+				{{transporteur.companyName}}
+				<br>
+				{{transporteur.description}}
+				<br>
+				{{transporteur.prix | number_format(1, ',', '.')}}
+				MAD;
+			</div>
+
+
+		</div>
+
+		<div class="col-md-6">
+			<div class="text-center">
+				<h4>Ma commande</h4>
+			</div>
+			<div class="order-summary">
+				{% set totalProducts = 0 %}
+				{% for key, product in cart %}
+					<div class="row {% if key > 0 %}mt-2{% endif %}">
+						<div class="col-2">
+							<img src="{{ asset('/uploads/' ~ product.product.photo) }}" alt="{{product.product.libelle}}" height="75">
+						</div>
+						<div class="col-8 my-auto">
+							{{product.product.libelle}}<br>
+							<small>{{product.product.description}}</small><br>
+							x
+							{{product.quantity}}
+						</div>
+						<div class="col-2 my-auto">
+							<p>{{((product.product.prix * product.quantity) / 100) | number_format(2, ',', '.')}}
+								MAD</p>
+						</div>
+					</div>
+					{% set totalProducts = totalProducts + ((product.product.prix * product.quantity) / 100) %}
+				{% endfor %}
+			</div>
+			<hr>
+			<strong>Sous-total :
+			</strong>
+			{{ totalProducts | number_format(2, ',', '.')}}
+			 MAD<br>
+			<strong>Livraison :
+			</strong>
+			{{transporteur.prix | number_format(1, ',', '.')}}
+			MAD
+			<hr>
+			{% set total = (totalProducts + (transporteur.prix / 100)) | number_format(2, ',', '.')  %}
+			<strong>Total : </strong>{{ total}} MAD
+
+			<a class="btn btn-success btn-block mt-3" id="checkout-button">Payer {{total}} MAD</a>
+
+		</div>
+	</div>
+
+{% endblock %}
