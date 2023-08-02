@@ -21,7 +21,7 @@ class CommandeCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
-            //DateTimeField::new('createdAt'),
+            //DateTimeField::new('creatfedAt'),
             TextField::new('user.getFullName'),
             MoneyField::new('total')->setCurrency('MAD'),
             BooleanField::new('payer', 'Payée')

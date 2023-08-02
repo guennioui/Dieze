@@ -32,7 +32,7 @@ class ProduitRepository extends ServiceEntityRepository
 
         if (!empty($search->string)) {
             $query = $query->andWhere('p.Libelle LIKE :string')->setParameter('string', "%{$search->string}%");
-        }
+        }        
 
         return $query->getQuery()->getResult();
     }

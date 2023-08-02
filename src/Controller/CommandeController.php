@@ -41,7 +41,7 @@ class CommandeController extends AbstractController
     }
 
     /**
-     * @Route("/commande-recaputilatif", name="commande_recap", methods={"POST"})
+     * @Route("/commande/recapitulatif", name="commande_recap", methods={"POST"})
      */
     public function add(Cart $cart, Request $request): Response
     {
@@ -62,6 +62,7 @@ class CommandeController extends AbstractController
 
             $this->entityManager->persist($commande);
 
+
             foreach ($cart->getFull() as $product) {
                 $ligneCommande = new LigneCommande();
                 $ligneCommande->setProduit($product['product']);
@@ -71,7 +72,8 @@ class CommandeController extends AbstractController
 
                 $this->entityManager->persist($ligneCommande);
             }
-            $this->entityManager->flush();
+
+            //$this->entityManager->flush();
 
             return $this->render('commande/add.html.twig', [
                 'cart' => $cart->getFull(),
