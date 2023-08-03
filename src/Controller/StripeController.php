@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use Stripe\Stripe;
-use App\Entity\User;
 use App\Classes\Cart;
-use App\Entity\Commande;
-use App\Entity\Produit;
-use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,46 +13,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StripeController extends AbstractController
 {
     /**
-     * @Route("/commande/create-session/{reference}", name="stripe_create_session")
+     * @Route("/commande/create-session", name="stripe_create_session")
      */
-    public function index(EntityManagerInterface $entityManager, Cart $cart, $reference)
+    public function index(Cart $cart)
     {
 
         $product_for_stripe = [];
         $YOUR_DOMAIN = 'http://127.0.0.1:8000';
 
-        $order = $entityManager->getRepository(Commande::class)->findOneByReference($reference);
-        if(!$order){
-            new JsonResponse(['error' => 'order']);
-        }
-
-        foreach ($cart->getFull() as $product) {  
-            $product_object = $entityManager->getRepository(Produit::class)->findOneByLibelle($product->getLibelle());          
+        foreach ($cart->getFull() as $product) {
             $product_for_stripe[] = [
                 'price_data' => [
                     'currency' => 'usd',
-                    'unit_amount' => $product->getPrix(),
+                    'unit_amount' => $product['product']->getPrix(),
                     'product_data' => [
-                        'name' => $product->getLibelle(),
+                        'name' => $product['product']->getLibelle(),
                     ],
                 ],
-                'quantity' => $product->getQuantity(),
+                'quantity' => $product['quantity'],
             ];
         }
-         $product_for_stripe[] = [
-                'price_data' => [
-                    'currency' => 'usd',
-                    'unit_amount' => $order->getTransporteur()->getPrix() * 100,
-                    'product_data' => [
-                        'name' => $product->getLibelle(),
-                    ],
-                ],
-                'quantity' => 1,
-            ];        
         Stripe::setApiKey('sk_test_51NaJ51Caf8vRlywGZLluN6Q54MffElyLwTxGzHr98FeKzCZu0ovuIhrzekkM0Kz7B2OZnbMaSlEnmYVyGOpHVWEU00RcMqg4eE');
         dd();    
         $checkout_session = Session::create([
-            'customer_email' => $this->getUser()->getEmail(),
             'payment_method_types' => ['card'],
             'line_items' => [[
                 $product_for_stripe

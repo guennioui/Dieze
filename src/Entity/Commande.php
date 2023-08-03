@@ -49,11 +49,6 @@ class Commande
      */
     private $transporteur;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $reference;
-
     public function __construct()
     {
         $this->ligneCommandes = new ArrayCollection();
@@ -177,18 +172,6 @@ class Commande
     public function setTransporteur(?Transporteur $transporteur): self
     {
         $this->transporteur = $transporteur;
-
-        return $this;
-    }
-
-    public function getReference(): ?string
-    {
-        return $this->reference;
-    }
-
-    public function setReference(string $reference): self
-    {
-        $this->reference = $reference;
 
         return $this;
     }

@@ -51,6 +51,7 @@ class CommandeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
             $commande = new Commande();
             $dateCommade = new DateTime();
             $transporteur = $form->get('transporteur')->getData();
@@ -77,6 +78,7 @@ class CommandeController extends AbstractController
             return $this->render('commande/add.html.twig', [
                 'cart' => $cart->getFull(),
                 'transporteur' => $transporteur,
+
                 'delivery_address' => 'sale',
                 'reference' => $commande->getReference()
             ]);
