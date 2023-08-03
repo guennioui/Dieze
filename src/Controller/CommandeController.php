@@ -51,17 +51,17 @@ class CommandeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $commande = new Commande();
             $dateCommade = new DateTime();
+            $reference = $dateCommade->format('dmY') . "-" . uniqid();
             $transporteur = $form->get('transporteur')->getData();
             $commande->setUser($this->getUser());
             $commande->setDateCommande($dateCommade);
             $commande->setTransporteur($transporteur);
             $commande->setStatus('non payer');
-            $commande->setReference($dateCommade->format('dmY') . "-" . uniqid());
-
+            $commande->setReference($reference);
             $this->entityManager->persist($commande);
+
 
             foreach ($cart->getFull() as $product) {
                 $ligneCommande = new LigneCommande();
@@ -78,7 +78,6 @@ class CommandeController extends AbstractController
             return $this->render('commande/add.html.twig', [
                 'cart' => $cart->getFull(),
                 'transporteur' => $transporteur,
-
                 'delivery_address' => 'sale',
                 'reference' => $commande->getReference()
             ]);

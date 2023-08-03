@@ -68,7 +68,7 @@
 			{{transporteur.prix | number_format(1, ',', '.')}}
 			MAD
 			<hr>
-			{% set total = (totalProducts + (transporteur.prix / 100)) | number_format(2, ',', '.')  %}
+			{% set total = (totalProducts + transporteur.prix) | number_format(2, ',', '.')  %}
 			<strong>Total : </strong>{{ total}} MAD
 
 			<a class="btn btn-success btn-block mt-3" id="checkout-button" >Payer {{total}} MAD</a>
@@ -84,22 +84,20 @@
 
 		checkoutButton.addEventListener("click", function () {
 
-			fetch("/commande/create-session/{{reference}}", {method: "POST"})
+			fetch("/commande/create-session/{{ reference }}", {method: "POST"})
 				.then(function (response) {
 					return response.json();})
 				.then(function (session) {
-					if(session.error === 'commande'){
-						windows.location.replace('{{path('commande')}}')
-					}else{
-						return stripe.redirectToCheckout({sessionId: session.id});})
-					}					
+					if(session.error === 'order'){
+						window.location.replace('{{path('commande')}}')
+					}
+					return stripe.redirectToCheckout({sessionId: session.id});})
 				.then(function (result) {
 					if (result.error) {
 						alert(result.error.message);
 					}})
 				.catch(function (error) {
-					console.error("Error:", error);
-					});
+					console.error("Error:", error);});
 		});
 
 	</script>
