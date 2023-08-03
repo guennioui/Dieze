@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use Stripe\Stripe;
 use App\Classes\Cart;
+use App\Entity\Commande;
+use App\Entity\Produit;
+use Doctrine\ORM\EntityManager;
 use Stripe\Checkout\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,24 +16,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StripeController extends AbstractController
 {
     /**
-     * @Route("/commande/create-session", name="stripe_create_session")
+     * @Route("/commande/create-session/{reference}", name="stripe_create_session")
      */
-    public function index(Cart $cart)
+    public function index(EntityManager $entityManager, Cart $cart, $reference)
     {
 
         $product_for_stripe = [];
         $YOUR_DOMAIN = 'http://127.0.0.1:8000';
 
+        $commande = $entityManager->getRepository(Commande::class)->findOneByReference($reference);
+        if (!$commande) {
+            return new JsonResponse(['error' => 'order']);
+        }
+
         foreach ($cart->getFull() as $product) {
+            $productObject = $entityManager->getRepository(Produit::class)->findOneByLibelle($product->getProduit());
             $product_for_stripe[] = [
                 'price_data' => [
-                    'currency' => 'usd',
-                    'unit_amount' => $product['product']->getPrix(),
+                    'currency' => 'MAD',
+                    'unit_amount' => $product->getPrix(),
                     'product_data' => [
-                        'name' => $product['product']->getLibelle(),
+                        'name' => $product->getProduit(),
                     ],
                 ],
-                'quantity' => $product['quantity'],
+                'quantity' => $product->getQuantity,
             ];
         }
         Stripe::setApiKey('sk_test_51NaJ51Caf8vRlywGZLluN6Q54MffElyLwTxGzHr98FeKzCZu0ovuIhrzekkM0Kz7B2OZnbMaSlEnmYVyGOpHVWEU00RcMqg4eE');
