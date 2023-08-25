@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 
 class ProduitCrudController extends AbstractCrudController
 {
@@ -40,7 +41,9 @@ class ProduitCrudController extends AbstractCrudController
                 ->setRequired(false),
             SlugField::new('slug')->setTargetFieldName('libelle'),
             AssociationField::new('categorie'),
-            AssociationField::new('user')
+            //try to delete user property:
+            AssociationField::new('user'),
+            BooleanField::new('isBest')
         ];
     }
 }

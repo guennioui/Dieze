@@ -29,7 +29,7 @@ class CommandeController extends AbstractController
     public function index(Cart $cart, Request $request): Response
     {
         if (!$this->getUser()->getAdresses()->getValues()) {
-            return $this->redirectToRoute('adresse_add ');
+            return $this->redirectToRoute('adresse_add');
         }
         $form = $this->createForm(CommandeType::class, null, [
             'user' => $this->getUser()

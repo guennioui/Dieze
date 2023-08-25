@@ -25,7 +25,7 @@ class Produit
     private $Libelle;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=65535)
      */
     private $Description;
 
@@ -63,6 +63,11 @@ class Produit
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isBest;
 
     public function __construct()
     {
@@ -220,6 +225,18 @@ class Produit
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function isIsBest(): ?bool
+    {
+        return $this->isBest;
+    }
+
+    public function setIsBest(bool $isBest): self
+    {
+        $this->isBest = $isBest;
 
         return $this;
     }
